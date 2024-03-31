@@ -12,9 +12,9 @@ function Quali() {
   const { season, round } = useParams();
   const navigate = useNavigate();
 
-  const { data, error, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["quali", season, round],
-    queryFn: async ({ queryKey }) => {
+    queryFn: async ({}) => {
       const data = await axios.get<QualiRes>(
         `https://ergast.com/api/f1/${season}/${round}/qualifying.json`
       );

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import SingleComment from "./SingleComment";
 import type { ISingleComment } from "../Types";
 import styles from "./CommentList.module.scss";
-import { Field, Label, Switch } from "@fluentui/react-components";
+import { Label, Switch } from "@fluentui/react-components";
 import Enumerable from "linq";
 
 const propsArray: ISingleComment[] = [

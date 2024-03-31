@@ -5,7 +5,7 @@ import RaceStar from "./RaceStar";
 
 type Props = RaceRatingProps;
 
-function RaceRating({ raceId, rating }: Props) {
+function RaceRating({ rating }: Props) {
   const [goldStars, setGoldStars] = useState<number>(rating);
 
   const starsToRenderInGold = useMemo(

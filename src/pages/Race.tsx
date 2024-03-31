@@ -14,9 +14,9 @@ function Race() {
   const { season, round } = useParams();
   const raceId = `race-${season}-${round}`;
 
-  const { data, error, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["race", season, round],
-    queryFn: async ({ queryKey }) => {
+    queryFn: async ({}) => {
       const data = await axios.get<RaceRes>(
         `https://ergast.com/api/f1/${season}/${round}/results.json`
       );

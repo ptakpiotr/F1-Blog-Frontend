@@ -1,8 +1,5 @@
 import { Label, Title3, Image } from "@fluentui/react-components";
-import { IPost } from "../Types";
 import Markdown from "react-markdown";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 
 function Post() {
