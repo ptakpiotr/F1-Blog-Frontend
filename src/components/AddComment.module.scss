@@ -1,0 +1,14 @@
+.addCommentArea {
+  margin-bottom: 0.5rem;
+}
+
+.actionArea {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 1rem;
+
+  label {
+    color: tomato;
+  }
+}

@@ -1,0 +1,12 @@
+.siteHeader {
+  display: flex;
+  row-gap: 0.5rem;
+  padding: 1rem;
+}
+
+.siteHeaderInfo {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1.5rem;
+  align-items: center;
+}

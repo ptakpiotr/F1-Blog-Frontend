@@ -1,0 +1,17 @@
+@use "../vars" as v;
+
+.footer {
+  position: sticky;
+  width: 100vw;
+  height: 3rem;
+  margin-left: -0.5rem;
+  bottom: 0px;
+  background-color: v.$main-color;
+  color: whitesmoke;
+
+  button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0px;
+  }
+}

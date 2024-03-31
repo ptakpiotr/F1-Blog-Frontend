@@ -1,0 +1,103 @@
+@use "_vars" as v;
+
+body {
+  max-height: 95dvh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  min-height: 72vh;
+
+  .user-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      column-gap: 1rem;
+
+      & > * {
+        margin: 0.25rem;
+        padding: 0.25rem;
+      }
+
+      & > :first-child {
+        min-width: 4rem;
+      }
+    }
+
+    button {
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.not-found > img {
+  max-height: 70vh;
+}
+
+.not-found > .page-not-found {
+  position: relative;
+  top: 15vh;
+  width: 50vw;
+}
+
+.main-race {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  .race-table {
+    flex: 1;
+    width: 45vw;
+    height: 60vh;
+    overflow-y: scroll;
+  }
+
+  .race-discussion {
+    flex: 1;
+    justify-self: flex-end;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+
+    .race-table {
+      width: 100vw;
+    }
+  }
+}
+
+.quali-res {
+  height: 60vh;
+  overflow-y: scroll;
+}
+
+.standings-container {
+  display: flex;
+  flex-direction: row;
+  max-height: 45vh;
+  overflow-y: scroll;
+  column-gap: 2rem;
+  & > * {
+    flex: 1;
+  }
+}
+
+.home-main {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: 3rem;
+
+  & [role="group"]:hover {
+    transform: scale(1.02);
+  }
+}
