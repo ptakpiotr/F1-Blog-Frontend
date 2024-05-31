@@ -2,16 +2,23 @@
 
 .footer {
   position: sticky;
-  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  width: 98vw;
   height: 3rem;
   margin-left: -0.5rem;
   bottom: 0px;
   background-color: v.$main-color;
   color: whitesmoke;
 
-  button {
-    position: absolute;
-    top: 0.5rem;
-    right: 0px;
+  span {
+    flex: 1;
+  }
+
+  a {
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 0.25rem;
+    margin: 0.25rem;
   }
 }

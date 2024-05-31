@@ -6,12 +6,18 @@ import {
   Checkbox,
   MessageBar,
 } from "@fluentui/react-components";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useState } from "react";
 import { registerUserSchema, RegisterUser } from "../validation";
-import { IErrorState } from "../Types";
+import { IErrorState, IGeneralResponse } from "../Types";
 import { ValidationError } from "yup";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 function Register() {
+  const { setUserState } = useContext(UserContext);
+
   const [registerState, setRegisterState] = useState<RegisterUser>({
     email: "",
     password: "",
@@ -24,24 +30,51 @@ function Register() {
     content: "",
   });
 
+  const navigate = useNavigate();
+
   const setStateValue = useCallback(
     (
       e: ChangeEvent<HTMLInputElement>,
       k: keyof Omit<RegisterUser, "isRobot">
     ) => {
-      setRegisterState({
-        ...registerState,
+      setRegisterState((prev) => ({
+        ...prev,
         [k]: e.target.value,
-      });
+      }));
     },
     []
   );
+
+  const { mutateAsync } = useMutation({
+    mutationKey: ["register"],
+    mutationFn: (user: Omit<RegisterUser, "isRobot">) => {
+      return axios.post<IGeneralResponse>(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/register`,
+        {
+          email: user.email,
+          password: user.password,
+          confirmedPassword: user.confirmPassword,
+        }
+      );
+    },
+    onSuccess: (data) => {
+      if (data.status === 201) {
+        const token = data.data.message;
+        localStorage.setItem("token", token);
+        if (setUserState) {
+          setUserState({ isLoggedIn: true, userId: token });
+        }
+        navigate("/");
+      }
+    },
+  });
 
   const handleClick = async () => {
     try {
       await registerUserSchema.validate(registerState);
 
-      // use mutation from React Query
+      await mutateAsync(registerState);
+
       setErrorState({
         content: "",
         isError: false,
@@ -53,7 +86,6 @@ function Register() {
         isError: true,
       });
     }
-    alert(JSON.stringify(registerState));
   };
 
   return (
@@ -111,13 +143,23 @@ function Register() {
         <Button
           appearance="primary"
           onClick={handleClick}
-          disabled={registerState.isRobot || !errorState.isError}
+          disabled={registerState.isRobot || errorState.isError}
         >
           Register
         </Button>
       </div>
       {errorState.isError ? (
-        <MessageBar intent="error">{errorState.content}</MessageBar>
+        <MessageBar
+          intent="error"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setErrorState({ isError: false, content: "" });
+          }}
+        >
+          {errorState.content}
+        </MessageBar>
       ) : (
         <></>
       )}

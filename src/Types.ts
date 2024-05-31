@@ -248,3 +248,7 @@ export interface IAddPost {
   title: string;
   photo: string;
 }
+
+export interface IGeneralResponse {
+  message: string;
+}
