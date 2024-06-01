@@ -8,12 +8,13 @@ import {
 } from "@fluentui/react-components";
 import { ChangeEvent, useCallback, useContext, useState } from "react";
 import { registerUserSchema, RegisterUser } from "../validation";
-import { IErrorState, IGeneralResponse } from "../Types";
+import { IErrorState, IGeneralResponse, IJwtResponsePayload } from "../Types";
 import { ValidationError } from "yup";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import { jwtDecode } from "jwt-decode";
 
 function Register() {
   const { setUserState } = useContext(UserContext);
@@ -57,12 +58,23 @@ function Register() {
         }
       );
     },
+    onError: (err) => {
+      setErrorState({
+        isError: true,
+        content: err.message,
+      });
+    },
     onSuccess: (data) => {
       if (data.status === 201) {
         const token = data.data.message;
         localStorage.setItem("token", token);
+
+        const decodedToken = jwtDecode<IJwtResponsePayload>(token);
         if (setUserState) {
-          setUserState({ isLoggedIn: true, userId: token });
+          setUserState({
+            isLoggedIn: true,
+            userId: decodedToken.userId?.toString(),
+          });
         }
         navigate("/");
       }

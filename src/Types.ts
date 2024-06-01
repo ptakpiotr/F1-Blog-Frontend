@@ -235,8 +235,7 @@ export interface ConstructorStanding {
 }
 
 export interface IPost {
-  postId: string;
-  authorName: string;
+  id: number;
   content: string;
   title: string;
   photo: string;
@@ -251,4 +250,9 @@ export interface IAddPost {
 
 export interface IGeneralResponse {
   message: string;
+}
+
+export interface IJwtResponsePayload {
+  userId: number;
+  sub: string;
 }

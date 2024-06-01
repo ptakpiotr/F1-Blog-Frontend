@@ -15,7 +15,6 @@ export const rateRaceSchema = yup.object({
 });
 
 export const addPostSchema = yup.object({
-  author: yup.string().uuid().required(),
   content: yup.string().required(),
   title: yup.string().required(),
   photo: yup.string().url().required(),

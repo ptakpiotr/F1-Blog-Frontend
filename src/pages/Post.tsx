@@ -1,41 +1,65 @@
-import { Label, Title3, Image } from "@fluentui/react-components";
+import {
+  Label,
+  Title3,
+  Image,
+  Spinner,
+  useToastController,
+  Toast,
+  ToastBody,
+  ToastTitle,
+} from "@fluentui/react-components";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Markdown from "react-markdown";
 import { useParams } from "react-router-dom";
+import { IPost } from "../Types";
+import { useEffect, useId } from "react";
 
 function Post() {
   const { id } = useParams();
 
-  // const { data, error, isLoading } = useQuery({
-  //   queryKey: ["post", id],
-  //   queryFn: async ({ queryKey }) => {
-  //     const data = await axios.get<IPost>(``);
-  //     return data.data;
-  //   },
-  // });
+  const toasterId = useId();
+  const { dispatchToast } = useToastController(toasterId);
+  const notify = (error: string) =>
+    dispatchToast(
+      <Toast>
+        <ToastTitle>An error occured while retrieving the post</ToastTitle>
+        <ToastBody>{error}</ToastBody>
+      </Toast>,
+      { intent: "error", timeout: 3000 }
+    );
 
-  // return (
-  //   <main>
-  //     <Title3 as="h3">{data?.title}</Title3>
-  //     <Label>Post by {data?.authorName}</Label>
-  //     <Image src={data?.photo} alt={data?.title} />
-  //     <Markdown>{data?.content}</Markdown>
-  //   </main>
-  // );
+  const {
+    data: posts,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => {
+      return axios.get<IPost[]>(`${import.meta.env.VITE_BACKEND_URL}/posts`);
+    },
+  });
+
+  useEffect(() => {
+    if (isError) {
+      notify(error.message);
+    }
+  }, [isError]);
+
+  const post = posts?.data.find((p) => p.id === parseInt(id ?? "-1"));
 
   return (
     <main>
-      <Title3 as="h3">
-        {"Test post"} {id}
-      </Title3>
-      <Label>Post by Piotr Ptak</Label>
-      <Image
-        src={
-          "https://images.unsplash.com/photo-1695299313084-da717e4add14?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-        width={"35%"}
-        alt={"Test post"}
-      />
-      <Markdown>{`# hello `}</Markdown>
+      {post ? (
+        <>
+          <Title3 as="h3">{post?.title}</Title3>
+          <Image src={post?.photo} width={"35%"} alt={"Test post"} />
+          <Markdown>{`# ${post?.title} 
+      ${post?.content}`}</Markdown>
+        </>
+      ) : (
+        <>No post with given Id found</>
+      )}
     </main>
   );
 }

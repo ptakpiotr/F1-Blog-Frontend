@@ -28,9 +28,6 @@ function ResultsTabRenderer(item: TabRace) {
         />
       </TableCell>
       <TableCell>
-        <RaceRating raceId={`${item.season}-${item.round}`} rating={2} />
-      </TableCell>
-      <TableCell>
         <Open16Regular cursor="pointer" onClick={goToRace} />
       </TableCell>
     </TableRow>

@@ -17,10 +17,12 @@ import {
   Toaster,
 } from "@fluentui/react-components";
 import { useContext, useId, useState } from "react";
-import { IAddPost } from "../Types";
+import { IAddPost, IGeneralResponse } from "../Types";
 import { UserContext } from "../App";
 import { addPostSchema } from "../validation";
 import { ValidationError } from "yup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 interface IProps {
   isOpen: boolean;
@@ -28,8 +30,47 @@ interface IProps {
 }
 
 function AddPost({ isOpen, closeDialog }: IProps) {
-  //TODO: useMutation
   const { userState } = useContext(UserContext);
+  const queryClient = useQueryClient();
+
+  const toasterId = useId();
+  const { dispatchToast } = useToastController(toasterId);
+  const notify = (error: string) =>
+    dispatchToast(
+      <Toast>
+        <ToastTitle>An error occured while fetching posts</ToastTitle>
+        <ToastBody subtitle="Contact the admin">{error}</ToastBody>
+      </Toast>,
+      { intent: "error", timeout: 3000 }
+    );
+
+  const { mutateAsync } = useMutation({
+    mutationKey: ["add-post"],
+    mutationFn: (post: IAddPost) => {
+      const token = localStorage.getItem("token");
+
+      return axios.post<IGeneralResponse>(
+        `${import.meta.env.VITE_BACKEND_URL}/posts`,
+        {
+          ...post,
+          userId: parseInt(post.authorId),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onError: (err) => {
+      notify(err.message);
+    },
+    onSuccess: async (_) => {
+      await queryClient.refetchQueries({
+        queryKey: ["posts"],
+      });
+    },
+  });
 
   const [post, setPost] = useState<IAddPost>({
     authorId: userState?.userId!,
@@ -38,20 +79,10 @@ function AddPost({ isOpen, closeDialog }: IProps) {
     title: "",
   });
 
-  const toasterId = useId();
-  const { dispatchToast } = useToastController(toasterId);
-  const notify = (error: string) =>
-    dispatchToast(
-      <Toast>
-        <ToastTitle>Validation error occured</ToastTitle>
-        <ToastBody subtitle="Correct the issues">{error}</ToastBody>
-      </Toast>,
-      { intent: "error", timeout: 3000 }
-    );
-
   const addPost = async () => {
     try {
       await addPostSchema.validate(post);
+      await mutateAsync(post);
       closeDialog();
     } catch (err) {
       const validErr = err as ValidationError;
