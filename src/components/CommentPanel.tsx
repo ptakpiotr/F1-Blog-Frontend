@@ -1,15 +1,21 @@
+import { memo } from "react";
 import AddComment from "./AddComment";
 import CommentList from "./CommentList";
+import { ISingleComment } from "../Types";
 
 interface IProps {
-  raceId: string;
+  addComment: (comment: string) => void;
+  comments: ISingleComment[];
 }
 
-export function CommentPanel({ raceId }: IProps) {
+export const CommentPanel = memo(function CommentPanel({
+  addComment,
+  comments,
+}: IProps) {
   return (
     <div>
-      <AddComment raceId={raceId} userId="" />
-      <CommentList />
+      <AddComment addComment={addComment} />
+      <CommentList wsComments={comments} />
     </div>
   );
-}
+});

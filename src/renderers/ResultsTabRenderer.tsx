@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 
 import type { TabRace } from "../Types";
-import RaceRating from "../components/RaceRating";
 
 function ResultsTabRenderer(item: TabRace) {
   const navigate = useNavigate();
@@ -26,9 +25,6 @@ function ResultsTabRenderer(item: TabRace) {
           code={item.country.substring(0, 3)}
           style={{ maxWidth: "2rem" }}
         />
-      </TableCell>
-      <TableCell>
-        <RaceRating raceId={`${item.season}-${item.round}`} rating={2} />
       </TableCell>
       <TableCell>
         <Open16Regular cursor="pointer" onClick={goToRace} />

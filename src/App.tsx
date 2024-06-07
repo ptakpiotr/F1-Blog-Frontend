@@ -1,10 +1,16 @@
-import { Suspense, createContext, lazy, useState } from "react";
+import { Suspense, createContext, lazy, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { ISeasonContext, IUserContext, IUserState } from "./Types";
+import {
+  IJwtResponsePayload,
+  ISeasonContext,
+  IUserContext,
+  IUserState,
+} from "./Types";
 import Loading from "./pages/Loading";
+import { jwtDecode } from "jwt-decode";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -27,9 +33,22 @@ function App() {
   );
 
   const [userState, setUserState] = useState<IUserState>({
-    isLoggedIn: true,
-    userId: "132",
+    isLoggedIn: false,
+    userId: "",
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decodedToken = jwtDecode<IJwtResponsePayload>(token);
+      
+      setUserState({
+        isLoggedIn: true,
+        userId: decodedToken.userId?.toString(),
+      });
+    }
+  }, []);
 
   return (
     <FluentProvider theme={webLightTheme}>

@@ -4,25 +4,13 @@ import { Add16Regular } from "@fluentui/react-icons";
 import styles from "./AddComment.module.scss";
 
 interface IProps {
-  userId: string;
-  raceId: string;
+  addComment: (comment: string) => void;
 }
 
 const MAX_LENGTH = 250;
 
-function AddComment({ userId, raceId }: IProps) {
-  //TODO: useMutation for adding comments
+function AddComment({ addComment }: IProps) {
   const [comment, setComment] = useState<string>("");
-
-  const addComment = async () => {
-    console.log({
-      userId,
-      raceId,
-      comment,
-    });
-
-    setComment("");
-  };
 
   const setCommentValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
@@ -44,7 +32,10 @@ function AddComment({ userId, raceId }: IProps) {
         <Button
           appearance="primary"
           icon={<Add16Regular />}
-          onClick={addComment}
+          onClick={() => {
+            addComment(comment);
+            setComment("");
+          }}
           disabled={comment.length > 250}
         >
           Add

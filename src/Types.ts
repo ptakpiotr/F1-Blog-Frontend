@@ -124,12 +124,9 @@ export interface Driver {
 }
 
 export interface ISingleComment {
-  commentId: string;
-  userId: string;
+  id: number;
+  raceId: string;
   comment: string;
-  author: string;
-  likes: number;
-  currentlyLikes: boolean;
 }
 
 export interface QualiRes {
@@ -235,8 +232,7 @@ export interface ConstructorStanding {
 }
 
 export interface IPost {
-  postId: string;
-  authorName: string;
+  id: number;
   content: string;
   title: string;
   photo: string;
@@ -247,4 +243,13 @@ export interface IAddPost {
   content: string;
   title: string;
   photo: string;
+}
+
+export interface IGeneralResponse {
+  message: string;
+}
+
+export interface IJwtResponsePayload {
+  userId: number;
+  sub: string;
 }

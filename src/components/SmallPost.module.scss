@@ -1,0 +1,13 @@
+.smallPost {
+  padding: 2rem;
+  margin: 1rem;
+  max-width: 70vw;
+
+  @media (max-width: 768px) {
+    max-width: 80vw;
+  }
+
+  @media (max-width: 460px) {
+    max-width: 90vw;
+  }
+}

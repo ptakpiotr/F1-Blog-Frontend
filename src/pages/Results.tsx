@@ -10,7 +10,7 @@ import { columns } from "../renderers/ResultsTabColumns";
 
 function Results() {
   const { season } = useContext(SeasonContext);
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["season", season],
     queryFn: async ({ queryKey }) => {
       const data = await axios.get<ResultsData>(
