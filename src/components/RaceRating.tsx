@@ -3,9 +3,11 @@ import type { RaceRating as RaceRatingProps } from "../validation";
 import Enumerable from "linq";
 import RaceStar from "./RaceStar";
 
-type Props = RaceRatingProps;
+type Props = RaceRatingProps & {
+  setRaceRating: (rating: number) => void;
+};
 
-function RaceRating({ rating }: Props) {
+function RaceRating({ rating, setRaceRating }: Props) {
   const [goldStars, setGoldStars] = useState<number>(rating);
 
   const starsToRenderInGold = useMemo(
@@ -20,7 +22,7 @@ function RaceRating({ rating }: Props) {
 
   const setRating = (rating: number) => {
     setGoldStars(rating);
-    //perform call to db -> save rating
+    setRaceRating(rating);
   };
 
   return (

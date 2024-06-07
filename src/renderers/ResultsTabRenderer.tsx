@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Flag from "react-world-flags";
 
 import type { TabRace } from "../Types";
-import RaceRating from "../components/RaceRating";
 
 function ResultsTabRenderer(item: TabRace) {
   const navigate = useNavigate();

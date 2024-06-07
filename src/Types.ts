@@ -124,12 +124,9 @@ export interface Driver {
 }
 
 export interface ISingleComment {
-  commentId: string;
-  userId: string;
+  id: number;
+  raceId: string;
   comment: string;
-  author: string;
-  likes: number;
-  currentlyLikes: boolean;
 }
 
 export interface QualiRes {

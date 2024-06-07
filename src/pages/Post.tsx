@@ -1,8 +1,6 @@
 import {
-  Label,
   Title3,
   Image,
-  Spinner,
   useToastController,
   Toast,
   ToastBody,
